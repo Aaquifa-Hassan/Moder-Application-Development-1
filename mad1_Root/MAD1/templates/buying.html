@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+<link rel="stylesheet" href='{{url_for("static",filename="event.css")}}'>
+
+{% endblock %}
+
+
+{% block body %}
+<div class="addproductscontainer" style="margin-top: 250px;">
+
+<h3 style="text-align: center;">{{session['purchase_book_title']}}</h3>
+<form action="/purchase" method="post">
+    <label for="seats">Price:{{session['purchase_book_price']}}</label>
+    Pay and download pdf?
+    <input value="CONFIRM" name="confirmation" type="hidden">
+    <div class="updateDeleteButton">
+        <button style="min-width: 80px;" type="submit">Confirm</button>
+        {% if session['to_where'] == 'from_mybooks' %}
+            <a style="margin-left: 10px;" href="{{url_for('myBooks')}}" class="button-like">Cancel</a>
+        {% else %}
+            <a style="margin-left: 10px;" href="{{url_for('user_dashboard')}}" class="button-like">Cancel</a>
+        {% endif %}
+    </div>
+    {% if error %}
+    <p style="color:red;text-align: center;">{{error}}</p>
+    {% endif %}
+</form>
+
+</div>
+
+{% endblock %}

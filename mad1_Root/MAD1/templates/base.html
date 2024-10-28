@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Events</title>
+
+    <link rel="stylesheet" href='{{url_for("static",filename="style.css")}}'>
+    {% block head %}{% endblock %}
+    <style>
+    
+    input[type="search"] {
+        padding: 8px;
+        border: 1px solid white; 
+        border-radius: 5px;
+        margin-right: 1px;
+    }
+
+    .selectnav {
+        padding: 8px;
+        border: 1px solid white; 
+        border-radius: 5px; 
+        margin-right: 10px;
+        background-color: rgba(255, 255, 255, 0.897); 
+        color: red; 
+    }
+
+    </style>
+</head>
+
+
+<body>
+
+    <nav class="navbar">
+        <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+            <div style="display: flex; align-items: center;">
+                {% if session['name']  %}
+                    {% if session['name'] == 'admin' %}
+                        <a href="{{ url_for('dashboard') }}" style="color: #fff; font-weight: bold; margin-right: 20px;">{{ session["name"] }}</a>
+                    {% endif %}
+                    {% if session['name'] != 'admin' %}
+                        <a href="{{ url_for('user_dashboard') }}" style="color: #fff; font-weight: bold; margin-right: 20px;">{{ session["name"] }}</a>
+                    {% endif %}
+                    {% block search %}{% endblock %}
+                </div>
+                <div style="margin-right: 40px;">
+                    {% if session['name'] == 'admin' %}
+                        <a href="{{ url_for('userAccess') }}" style="margin-right: 10px;">User Details</a>
+                    {% else %}
+                        <a href="{{ url_for('myBooks') }}" style="margin-right: 10px;">My Books</a>
+                    {% endif %}
+                    <a href="{{ url_for('logout') }}" >Logout</a>
+                </div>
+            {% endif %}
+            
+            {% if not session['name'] %}
+                <div style="display: flex;">
+
+                    <a href="{{ url_for('login') }}" style="margin-left: 1750px;margin-right: 20px;">Login</a>
+                    <a href="{{ url_for('register') }}">Sign up</a>
+                </div>
+            {% endif %}
+        </div>
+    </nav>
+    
+    
+    
+    
+    
+    
+    <div  class="body">
+        {% block body %}{% endblock %}
+    </div>
+ 
+</body>
+
+</html>

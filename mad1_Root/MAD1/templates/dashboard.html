@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+<style>
+    
+
+    h2 {
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    section {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        padding: 20px;
+        margin: 5px;
+    }
+
+    h3 {
+        color: #4caf50;
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    li {
+        margin-bottom: 8px;
+    }
+    
+    .catbox {
+    background-color: #f2f2f2; 
+    border: 1px solid #ccc; 
+    border-radius: 5px; 
+    padding: 10px; 
+    margin: 10px; 
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); 
+    width: 100%; 
+    display: inline-block; 
+    }
+    
+</style>
+
+{% endblock %}
+
+{% block search %}
+
+<form action="/search" method="post" style="margin-right: 20px; display: flex; align-items: center;">
+    <input type="search" name="search" placeholder="Search...">
+    <input type="hidden" name="where_search" value="dashboard">
+    <select class="selectnav" name="searchType">
+        <option value="Section">Section</option>
+        <option value="Title">Title</option>
+    </select>
+    <button type="submit" style="padding: 8px; background-color: white; color: red; border: 1px solid white; border-radius: 5px; cursor: pointer;" onmouseover="this.style.backgroundColor='#fff'" onmouseout="this.style.backgroundColor='white'">Search</button>
+    
+</form>
+
+{% endblock %}
+
+
+{% block body %}
+
+    {% if not sections %}
+    <div style="margin-top: 250px;margin-left: 850px;">
+        No sections has been added
+    </div>
+        
+    {% endif %}
+
+    {% for section in sections %}
+        <section>
+            <h3 style="text-align: center;">{{ section.name }}</h3>
+            {% if section.books %}
+                <div style="width: 350px;background-color: beige;display: inline;">
+                    <ul>
+                        {% for book in section.books %}
+                            <div class="catbox" style="width: 300px;">
+                            <li>
+                                <strong>Title:</strong> {{ book.name }}<br>
+                                <strong>Content:</strong> {{ book.content }}<br>
+                                <strong>Date of issue:</strong> {{ book.date_issued }}<br>
+                                <strong>Author:</strong> {{ book.author }}<br>
+                                <strong>Holding days:</strong> {{ book.return_date }}<br>
+                            </li>
+                            <div class="updateDeleteButton">
+                                <form action="/update-book" method="post">
+                                    <input type="hidden" name="method" value="POST">
+                                    <input type="hidden" name="section" value="{{section.name}}">
+                                    <input type="hidden" name="book_title" value="{{book.name}}">
+                                    <input type="hidden" name="book_id" value="{{book.book_id}}">
+                                    <button  value="{{book}}" name="book" type="submit">Update</button>
+                                </form>
+                                <form style="margin-left: 10px;" action="/delete-book" method="post">
+                                    <input type="hidden" name="method" value="POST">
+                                    <input type="hidden" name="section" value="{{section.name}}">
+                                    <input type="hidden" name="book_name" value="{{book.name}}">
+                                    <input type="hidden" name="book_id" value="{{book.book_id}}">
+                                    <button style="background-color: red;" type="submit">Delete</button>
+                                </form>
+                            </div>
+                            <br>
+                            </div>
+                        {% endfor %}
+                    </ul>
+                </div>
+                
+                
+            {% else %}
+                <p>No books at this section</p>
+            {% endif %}
+            <div class="updateDeleteButton">
+                <form action="/update-section" method="post">
+                    <input type="hidden" name="method" value="POST">
+                    <button style="min-width: 180px;" name="update_section" value="{{section.name}}" type="submit">Update Section name</button>
+                </form>
+                <form style="margin-left: 10px;" action="/delete-section" method="post">
+                    <input value="POST" name="method" type="hidden">
+                    <button style="background-color: red;min-width: 180px;" name="delete_section" value="{{section.name}}" type="submit">Delete Section</button>
+                </form>
+            </div>
+        </section>
+    {% endfor %}
+    <div class="updateDeleteButton">
+        <form action="/add-book" method="get">
+            <button  type="submit">Add New Books</button>
+        </form>
+    </div>
+    
+{% endblock %}

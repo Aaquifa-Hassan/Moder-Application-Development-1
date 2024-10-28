@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+<link rel="stylesheet" href='{{url_for("static",filename="event.css")}}'>
+
+<style>
+        .container {
+            display: flex;
+            justify-content: space-between;
+        }
+        .list-container {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto; 
+            max-height: 80vh; 
+        }
+        .list {
+            padding: 0;
+            list-style-type: none;
+        }
+        .message {
+            background-color: #f2f2f2;
+            border-radius: 10px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        .requests {
+            background-color: #f9f9f9;
+        }
+        .permissions {
+            background-color: #e0f7fa;
+        }
+</style>
+
+{% endblock %}
+
+
+{% block body %}
+
+<div class="container">
+    <!-- Left side for requests -->
+    <div class="list-container requests">
+        <h2 class="list-title">Requests</h2>
+        <ul class="list">
+            {% for request in requests %}
+                <li class="message">
+                    <strong>User : </strong>{{request.user.username}}<br>
+                    <strong>Book : </strong>{{request.book.name}}
+                    <form style="margin-left: 10px;float:inline-end;margin-top: -20px;" action="/delete-request" method="post">
+                        <input type="hidden" name="book_id" value="{{request.book.book_id}}">
+                        <input type="hidden" name="user_id" value="{{request.user.user_id}}">
+                        <button style="background-color: red;" type="submit">Delete</button>
+                    </form>
+                    <form style="float: inline-end;margin-top: -20px;" action="/approve-request" method="post">
+                        <input type="hidden" name="book_id" value="{{request.book.book_id}}">
+                        <input type="hidden" name="user_id" value="{{request.user.user_id}}">
+                        <input type="hidden" name="return_date" value="{{request.book.return_date}}">
+                        <button  name="book" type="submit">Approve</button>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <!-- Right side for permissions -->
+    <div class="list-container permissions">
+        <h2 class="list-title">Issued</h2>
+        <ul class="list">
+            {% for supply in supplied %}
+                <li class="message">
+                    <strong>User : </strong>{{supply.user.username}}<br>
+                    <strong>Book : </strong>{{supply.book.name}}<br>
+                    <strong>Expiries on :</strong>{{supply.return_date}}
+                    <form style="margin-right: 50px;float:inline-end;margin-top: -20px;" action="/revoke" method="post">
+                        <input type="hidden" name="book_id" value="{{supply.book.book_id}}">
+                        <input type="hidden" name="user_id" value="{{supply.user.user_id}}">
+                        <button style="background-color: red;" type="submit">Revoke</button>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+
+{% endblock %}

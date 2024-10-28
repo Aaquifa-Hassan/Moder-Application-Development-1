@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+<style>
+    
+
+    h2 {
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    section {
+        background-color: #fff;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        padding: 20px;
+        margin: 5px;
+    }
+
+    h3 {
+        color: #4caf50;
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    li {
+        margin-bottom: 8px;
+    }
+    .catbox {
+    background-color: #f2f2f2; 
+    border: 1px solid #ccc; 
+    border-radius: 5px; 
+    padding: 10px; 
+    margin: 10px; 
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); 
+    width: 100%; 
+    display: inline-block; 
+    }
+    
+
+    
+</style>
+
+{% endblock %}
+
+{% block search %}
+
+<form action="/search" method="post" style="margin-right: 20px; display: flex; align-items: center;">
+    <input type="search" name="search" placeholder="Search...">
+    <input type="hidden" name="where_search" value="myBooks">
+    <select class="selectnav" name="searchType">
+        <option value="Section">Section</option>
+        <option value="Title">Title</option>
+    </select>
+    <button type="submit" style="padding: 8px; background-color: white; color: red; border: 1px solid white; border-radius: 5px; cursor: pointer;" onmouseover="this.style.backgroundColor='#fff'" onmouseout="this.style.backgroundColor='white'">Search</button>
+</form>
+
+{% endblock %}
+
+{% block body %}
+
+    {% if not lended %}
+        <div style="margin-top: 250px;margin-left: 850px;">
+            No books has been lended
+        </div>
+    {% endif %}
+        <div style="margin-top: 20px;">
+    
+                        {% for item in lended %}
+                            <div class="catbox" style="width: 300px;">
+                            
+                                <strong>Title:</strong> {{ item.book.name }}<br>
+                                <strong>Content:</strong> {{ item.book.content }}<br>
+                                <strong>Date of issue:</strong> {{ item.book.date_issued }}<br>
+                                <strong>Author:</strong> {{ item.book.author }}<br>
+                                <strong>Holding days:</strong> {{ item.book.return_date }}<br>
+                                <strong>Section name:</strong>{{item.book.section.name}}
+                            <div class="updateDeleteButton">
+                                <form style="margin-left: 10px;" action="/return" method="post">
+                                    <input type="hidden" name="confirmation" value="FALSE">
+                                    <input type="hidden" name="book_title" value="{{item.book.name}}">
+                                    <input type="hidden" name="book_id" value="{{item.book.book_id}}">
+                                    <button type="submit">Return</button>
+                                </form>
+                                <form style="margin-left: 10px;" action="/purchase" method="post">
+                                    <input type="hidden" name="confirmation" value="FALSE">
+                                    <input type="hidden" name="book_title" value="{{item.book.name}}">
+                                    <input type="hidden" name="book_id" value="{{item.book.book_id}}">
+                                    <input type="hidden" name="book_price" value="{{item.book.price}}">
+                                    <input type="hidden" name="to_where" value="from_mybooks">
+                                    <button style="background-color: green;" type="submit">Purchase</button>
+                                </form>
+                                <form style="margin-left: 10px;" action="/feedback" method="post">
+                                    <input type="hidden" name="confirmation" value="FALSE">
+                                    <input type="hidden" name="section_name" value="{{item.book.section.name}}">
+                                    <input type="hidden" name="section_id" value="{{item.book.section.section_id}}">
+                                    <input type="hidden" name="book_title" value="{{item.book.name}}">
+                                    <input type="hidden" name="book_id" value="{{item.book.book_id}}">
+                                    <input type="hidden" name="to_where" value="from_mybooks">
+                                    <button type="submit">Feedback</button>
+                                </form>
+                            </div>
+                            </div>
+                        {% endfor %}
+                    
+        </div>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+<link rel="stylesheet" href='{{url_for("static",filename="event.css")}}'>
+
+{% endblock %}
+
+
+{% block body %}
+<div class="addproductscontainer">
+
+<h2 style="text-align: center;">Add New Book</h2>
+
+<form action="/add-book" method="post">
+    <label for="title">Title:</label>
+    <input type="text" id="title" name="name" required><br>
+
+    <label for="content">Content:</label>
+    <textarea id="content" name="content" rows="4" required></textarea><br>
+
+    <label for="price">Price:</label>
+    <input type="number" id="price" name="price" min="0" required><br>
+
+    <label for="author">Author:</label>
+    <input type="text" id="author" name="author" required><br>
+
+    <label for="date">Date Issued:</label>
+    <input type="date" id="date" name="date_issued" max="{{ current_date }}" required><br>
+
+    <label for="return days">No of Days can be hold:</label>
+    <input type="number" id="return_date" name="return_date" required><br>
+
+    <label >Existing Sections: (Optional)</label>
+                <select name="ExistingSection" style="width: 100%; padding: 8px; margin-bottom: 16px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px;">
+                    <option value="Default" selected>None selected</option>
+                    
+                    {% for section in sections %}
+                        <option value="{{section.section_id}}">{{section.name}}</option>
+                    {% endfor %}
+                </select>
+    
+    <label >New Section: (Optional)</label>
+    <input type="text" name="NewSection" placeholder="Fill if your desiered Section is not above" autofocus>
+        
+    
+    <input type="submit" value="Add Book">
+    {% if error %}
+        <p style="color:red">{{error}}</p>
+    {% endif %}
+</form>
+
+</div>
+
+{% endblock %}

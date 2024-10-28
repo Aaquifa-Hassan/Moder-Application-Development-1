@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+<link rel="stylesheet" href='{{url_for("static",filename="event.css")}}'>
+
+{% endblock %}
+
+
+{% block body %}
+<div class="addproductscontainer" style="margin-top: 250px;">
+
+{% if error %}
+    <p style="color:green;text-align: center;">{{error}}</p>
+    <a style="margin-left: 80px;" href="{{url_for('user_dashboard')}}" class="button-like">Go back to dashboard</a>
+{% elif limitError %}
+    <p style="color:red;text-align: center;">{{limitError}}</p>
+    <a style="margin-left: 80px;" href="{{url_for('user_dashboard')}}" class="button-like">Go back to dashboard</a>
+{% else %}
+    <h3 style="text-align: center;"> Confirm book request for{{session['book_title']}}</h3>
+    <h3>In {{session['section_name']}}</h3>
+
+    <form action="/request" method="post">
+        <input value="CONFIRM" name="confirmation" type="hidden">
+        <div class="updateDeleteButton">
+            <button style="min-width: 80px;" type="submit">Request</button>
+            <a style="margin-left: 10px;" href="{{url_for('user_dashboard')}}" class="button-like">Cancel</a>
+        </div>
+    </form>
+{% endif %}
+
+</div>
+
+{% endblock %}

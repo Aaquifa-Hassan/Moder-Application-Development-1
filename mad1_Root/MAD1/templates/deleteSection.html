@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+<link rel="stylesheet" href='{{url_for("static",filename="event.css")}}'>
+<style>
+button {
+    background-color: #d4201a;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #971717;
+}
+</style>
+
+{% endblock %}
+
+
+{% block body %}
+<div class="addproductscontainer" style="margin-top: 250px;">
+
+<h3 style="text-align: center;">Delete Location {{session["delete_section"]}}</h3>
+<form action="/delete-section" method="post">
+    <input value="DELETE" name="method" type="hidden">
+    <p style="color: red;">Are you sure all the events assosiated with this section will be deleted?</p>
+    <div class="updateDeleteButton">
+        <button style="min-width: 80px;" type="submit">Confirm</button>
+        <a style="margin-left: 10px;" href="{{url_for('dashboard')}}" class="button-like">Cancel</a>
+    </div>
+    {% if error %}
+    <p style="color:red">{{error}}</p>
+    {% endif %}
+</form>
+
+</div>
+
+{% endblock %}

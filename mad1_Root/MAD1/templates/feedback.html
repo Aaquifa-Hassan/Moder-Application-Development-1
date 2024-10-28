@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+<link rel="stylesheet" href='{{url_for("static",filename="event.css")}}'>
+
+{% endblock %}
+
+
+{% block body %}
+<div class="addproductscontainer" style="margin-top: 250px;">
+
+<h3 style="text-align: center;">Feedback form for {{session['book_title']}}</h3>
+<h3>In {{session['section_name']}}</h3>
+<form action="/feedback" method="post">
+    <input value="CONFIRM" name="confirmation" type="hidden">
+    <textarea id="feedback" name="feedback" placeholder="Give your feedback..." rows="4" required></textarea><br>
+    <div class="updateDeleteButton">
+        <button style="min-width: 80px;" type="submit">Submit</button>
+        {% if session['to_where'] == 'from_mybooks' %}
+            <a style="margin-left: 10px;" href="{{url_for('myBooks')}}" class="button-like">Cancel</a>
+        {% else %}
+            <a style="margin-left: 10px;" href="{{url_for('user_dashboard')}}" class="button-like">Cancel</a>
+        {% endif %}
+    </div>
+    {% if error %}
+    <p style="color:red;text-align: center;">{{error}}</p>
+    {% endif %}
+</form>
+
+</div>
+
+{% endblock %}

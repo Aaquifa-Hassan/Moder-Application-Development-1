@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block head %}
+
+<link rel="stylesheet" href='{{url_for("static",filename="event.css")}}'>
+
+{% endblock %}
+
+
+{% block body %}
+<div class="addproductscontainer" style="margin-top: 250px;">
+
+<h2 style="text-align: center;">Update Section {{session['update_section']}}</h2>
+<form action="/update-section" method="post">
+    <label for="location">New Name:</label>
+    <input value="PUT" name="method" type="hidden">
+    <input type="text" name="new_name" required><br> 
+    <div class="updateDeleteButton">
+        <button style="min-width: 80px;" type="submit">Submit</button>
+        <a style="margin-left: 10px;" href="{{url_for('dashboard')}}" class="button-like">Cancel</a>
+    </div>
+    {% if error %}
+    <p style="color:red">{{error}}</p>
+    {% endif %}
+</form>
+
+</div>
+
+{% endblock %}
